@@ -1,4 +1,3 @@
-#include <cstddef>
 #include <string.h>
 
 #include "_sequence_.h"
@@ -19,17 +18,17 @@ Sequence_new( size_t datum_size, size_t capacity )
 		return NULL;
 	}
 	
-	seq.data = NULL;
-	seq.data = malloc(datum_size*size);
-	if (!seq.data) {
+	seq->data = NULL;
+	seq->data = malloc(datum_size*capacity);
+	if (!seq->data) {
 		DBG_OUT("Failed to allocate Sequence.data.");
 		free(seq);
 		return NULL;
 	}
 	
-	seq.datum_size = datum_size;
-	seq.length     = 0;
-	seq.capacity   = size;
+	seq->datum_size = datum_size;
+	seq->length     = 0;
+	seq->capacity   = capacity;
 
 	return seq;
 }
@@ -72,7 +71,7 @@ Sequence_shrink(Sequence self)
 		return;
 	}
 
-	memcpy(new_arr, self->data, self->length);
+	memcpy(new_arr, self->data, self->length * self->datum_size);
 
 	free(self->data);
 
@@ -106,7 +105,7 @@ void *
 Sequence_at(Sequence self, size_t index)
 {
 	assert(self);
-	assert(self->capacity <= index);
+	assert(index < self->capacity);
 
 	return INDEX(index);
 }
@@ -138,7 +137,7 @@ Sequence_delete(Sequence self, size_t index, size_t size)
 	
 	int rest = self->length - index;
 	memcpy(INDEX(index), INDEX(index + size), rest * self->datum_size);
-	self->length--;
+	self->length -= size;
 }
 
 
@@ -156,7 +155,7 @@ Sequence_insert(Sequence self, size_t index, void *data, size_t size)
 
 	int rest = self->length - index;
 	memcpy(INDEX(index+size), INDEX(index), rest * self->datum_size);
-	memcpy(Index(index), data, size);
+	memcpy(INDEX(index), data, size * self->datum_size);
 	self->length += size;
 }
 
@@ -173,7 +172,7 @@ Sequence_length(Sequence self)
 void
 Sequence_replace(Sequence self, size_t index, void *data, size_t size)
 {
-	assert(self)
+	assert(self);
 	assert(index < self->capacity);
 	assert(index < self->length);
 	assert(data);

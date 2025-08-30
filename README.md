@@ -1,6 +1,6 @@
 # BTCHWRK
 
-Pronounced "Batch Work".
+Pronounced "Batch Work" ;).
 
 ---
 
@@ -10,9 +10,11 @@ free as public domain or under the terms of the Zero BSD license -- take your
 pick.
 
 ---
-## Features:
+## Features/API:
 
-- `Sequence` - A dynamic array container type.
+- `Any` - `<btchwrk/common.h>`: A typedef'd union that can hold any basic C type.
+
+- `Sequence` - `<btchwrk/sequence.h>`: A dynamic array container type.
 	- `Sequence Sequence_new( size_t datum_size, size_t capacity)`: Creates a new
 	`Sequence` whose elements are `datum_size` wide and with `capacity` number
 	of elements.
@@ -41,6 +43,14 @@ pick.
 	- `void Sequence_replace(Sequence seq, size_t index, void *data, size_t size)`
 	: Replaces `size` number of elements of a `Sequence`, starting at `index`
 	with `size` number of elements from array `data`. 
+
+- `Variant` - `<btchwrk/common.h>`: A transparent tagged union which can hold 
+any basic C type. Has the following structure:
+	- `VariantTag tag`: The tag indicating the currently held type.
+	- `Any value`: The value held in the `Variant`.
+
+- `VariantTag` - `<btchwrk/common.h>`: A typedef'd enum, enumerating every basic
+C type. Eat entry is in `SHOUT_CASE` and starts with the `VARIANT_` prefix.
 
 ---
 
