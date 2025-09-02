@@ -56,6 +56,8 @@ C type. Eat entry is in `SHOUT_CASE` and starts with the `VARIANT_` prefix.
 
 ## License:
 
+Zero-BSD
+
 ```
 Copyright (C) 2025 by chrisxdeboy@gmail.com
 

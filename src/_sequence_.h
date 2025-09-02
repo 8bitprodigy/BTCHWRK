@@ -7,10 +7,10 @@
 typedef struct
 Seq
 {
+	void   *data;
 	size_t  datum_size;
 	size_t  length;
 	size_t  capacity;
-	void   *data;
 }
 Seq;
 

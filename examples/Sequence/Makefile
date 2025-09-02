@@ -1,7 +1,7 @@
 # test_Sequence Example Makefile
 
 # Program name
-PROGRAM = test_Sequence
+PROGRAM = Sequence
 
 # Source files
 SOURCES = main.c
