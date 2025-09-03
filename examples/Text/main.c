@@ -4,178 +4,263 @@
 
 #include "text.h"
 
-
+/* Enhanced macro to print Text objects with detailed info */
 #define PRINT_TEXT(txt, name) do { \
-    char *str = Text_toString(txt); \
-    printf("%s: Length=%zu, Content=\"%s\"\n", \
-           name, Text_length(txt), str ? str : "(null)"); \
-    Text_free(str);\
+    if (txt) { \
+        char *str = Text_toCStr(txt); \
+        printf("%s: Length=%zu, Content=\"%s\"\n", \
+               name, Text_length(txt), str ? str : "(null)"); \
+        free(str); \
+    } else { \
+        printf("%s: NULL\n", name); \
+    } \
+} while(0)
+
+/* Macro to print TextBuffer objects */
+#define PRINT_TEXTBUFFER(buf, name) do { \
+    if (buf) { \
+        Text txt = TB2TXT(buf); \
+        char *str = Text_toCStr(txt); \
+        printf("%s: Length=%zu, Content=\"%s\"\n", \
+               name, TextBuffer_length(buf), str ? str : "(null)"); \
+        free(str); \
+    } else { \
+        printf("%s: NULL\n", name); \
+    } \
 } while(0)
 
 #define SEPARATOR() printf("\n==============================================\n")
 
-
 int main(void) {
-    printf("BTCHWRK Text API Complete Test\n");
+    printf("BTCHWRK Text API Complete Test Suite\n");
     SEPARATOR();
     
-    // Test 1: Constructor with TXT macro
-    printf("1. Testing TXT() macro and Text_new()\n");
-    Text txt1 = TXT("Hello");
-    PRINT_TEXT(txt1, "txt1 from TXT(\"Hello\")");
+    /* Test 1: Basic Text creation and macros */
+    printf("1. Testing Text creation macros\n");
+    Text txt1 = TXT("Hello World");
+    PRINT_TEXT(txt1, "txt1 from TXT()");
     
-    // Test 2: Manual constructor
-    printf("\n2. Testing Text_new() manually\n");
-    char *manual_str = "World!";
-    Text txt2 = Text_new(manual_str, strlen(manual_str));
-    PRINT_TEXT(txt2, "txt2 from manual Text_new");
+    char *cstr = "Dynamic String";
+    Text txt2 = CSTR2TXT(cstr);
+    PRINT_TEXT(txt2, "txt2 from CSTR2TXT()");
     
-    // Test 3: Length function
-    printf("\n3. Testing Text_length()\n");
-    printf("Length of txt1: %zu\n", Text_length(txt1));
-    printf("Length of txt2: %zu\n", Text_length(txt2));
+    /* Test 2: Text access methods */
+    printf("\n2. Testing Text access methods\n");
+    Text sample = TXT("ABCDEFG");
+    PRINT_TEXT(sample, "sample text");
     
-    // Test 4: toString function
-    printf("\n4. Testing Text_toString()\n");
-    char *str1 = Text_toString(txt1);
-    char *str2 = Text_toString(txt2);
-    printf("txt1 as string: \"%s\"\n", str1);
-    printf("txt2 as string: \"%s\"\n", str2);
-    free(str1);
-    free(str2);
+    printf("charAt(0): '%c'\n", Text_charAt(sample, 0));
+    printf("charAt(3): '%c'\n", Text_charAt(sample, 3));
+    printf("charAt(6): '%c'\n", Text_charAt(sample, 6));
+    printf("length(): %zu\n", Text_length(sample));
     
-    // Test 5: Comparison
-    printf("\n5. Testing Text_compare() and txtcmp() macro\n");
-    Text txt3 = TXT("Hello");
-    Text txt4 = TXT("World");
-    Text txt5 = TXT("Apple");
+    /* Test 3: Text comparison */
+    printf("\n3. Testing Text comparison\n");
+    Text cmp1 = TXT("Apple");
+    Text cmp2 = TXT("Banana");
+    Text cmp3 = TXT("Apple");
     
-    printf("compare(\"Hello\", \"Hello\"): %d\n", Text_compare(txt1, txt3));
-    printf("compare(\"Hello\", \"World\"): %d\n", txtcmp(txt1, txt4));
-    printf("compare(\"Hello\", \"Apple\"): %d\n", Text_compare(txt1, txt5));
-    printf("compare(\"Apple\", \"Hello\"): %d\n", Text_compare(txt5, txt1));
+    printf("compare(\"Apple\", \"Banana\"): %d\n", Text_compare(cmp1, cmp2));
+    printf("compare(\"Apple\", \"Apple\"): %d\n", txtcmp(cmp1, cmp3));
+    printf("compare(\"Banana\", \"Apple\"): %d\n", Text_compare(cmp2, cmp1));
     
-    // Test 6: Concatenation
-    printf("\n6. Testing Text_concat() and txtcat() macro\n");
-    Text txt6 = TXT("Hello");
-    Text txt7 = TXT(" World");
-    PRINT_TEXT(txt6, "Before concat - txt6");
-    PRINT_TEXT(txt7, "Before concat - txt7");
+    /* Test 4: Text search methods */
+    printf("\n4. Testing Text search methods\n");
+    Text haystack = TXT("The quick brown fox jumps over the lazy dog");
+    Text needle1 = TXT("fox");
+    Text needle2 = TXT("cat");
+    Text needle3 = TXT("the");
     
-    txtcat(txt6, txt7);
-    PRINT_TEXT(txt6, "After txtcat(txt6, txt7)");
+    PRINT_TEXT(haystack, "haystack");
+    printf("find(\"fox\"): %d\n", Text_find(haystack, needle1));
+    printf("find(\"cat\"): %d\n", Text_find(haystack, needle2));
+    printf("find(\"the\"): %d\n", Text_find(haystack, needle3));
+    printf("rfind(\"the\"): %d\n", Text_rfind(haystack, needle3));
+    printf("findChar('o'): %d\n", Text_findChar(haystack, 'o'));
+    printf("findChar('z'): %d\n", Text_findChar(haystack, 'z'));
     
-    // Test 7: N-Concatenation (partial)
-    printf("\n7. Testing Text_nConcat() and txtncat() macro\n");
-    Text txt8 = TXT("Start");
-    Text txt9 = TXT("1234567890");
-    PRINT_TEXT(txt8, "Before nConcat - txt8");
-    PRINT_TEXT(txt9, "Before nConcat - txt9");
+    /* Test 5: Text substring */
+    printf("\n5. Testing Text substring\n");
+    Text original = TXT("Hello, World!");
+    PRINT_TEXT(original, "original");
     
-    Text_nConcat(txt8, txt9, 5);  // Only concat first 5 chars
-    PRINT_TEXT(txt8, "After nConcat(txt8, txt9, 5)");
+    Text sub1 = Text_substring(original, 0, 5);
+    Text sub2 = Text_substring(original, 7, 5);
+    Text sub3 = Text_substring(original, 7, 100); /* Test bounds */
     
-    // Test 8: Empty text handling
-    printf("\n8. Testing empty text handling\n");
-    Text empty1 = TXT("");
-    Text empty2 = Text_new(NULL, 0);  // Test NULL string
-    PRINT_TEXT(empty1, "Empty from TXT(\"\")");
-    if (empty2) {
-        PRINT_TEXT(empty2, "Empty from Text_new(NULL, 0)");
-    } else {
-        printf("Text_new(NULL, 0) returned NULL\n");
-    }
+    PRINT_TEXT(sub1, "substring(0, 5)");
+    PRINT_TEXT(sub2, "substring(7, 5)");
+    PRINT_TEXT(sub3, "substring(7, 100)");
     
-    // Test 9: Long text handling
-    printf("\n9. Testing long text\n");
-    char long_string[1000];
-    for (int i = 0; i < 999; i++) {
-        long_string[i] = 'A' + (i % 26);
-    }
-    long_string[999] = '\0';
+    /* Test 6: TextBuffer creation */
+    printf("\n6. Testing TextBuffer creation\n");
+    TextBuffer buf1 = TextBuffer_new(100);
+    TextBuffer buf2 = TextBuffer_fromText(TXT("Initial content"));
+    TextBuffer buf3 = TextBuffer_fromCStr("From C string");
     
-    Text long_txt = Text_new(long_string, 999);
-    printf("Long text length: %zu\n", Text_length(long_txt));
+    PRINT_TEXTBUFFER(buf1, "Empty buffer");
+    PRINT_TEXTBUFFER(buf2, "Buffer from Text");
+    PRINT_TEXTBUFFER(buf3, "Buffer from C string");
     
-    char *long_str = Text_toString(long_txt);
-    printf("First 50 chars: \"%.50s\"\n", long_str);
-    printf("Last 50 chars: \"%.50s\"\n", long_str + Text_length(long_txt) - 50);
-    free(long_str);
+    /* Test 7: TextBuffer manipulation */
+    printf("\n7. Testing TextBuffer manipulation\n");
+    TextBuffer working_buf = TextBuffer_new(200);
+    PRINT_TEXTBUFFER(working_buf, "Initial empty buffer");
     
-    // Test 10: Multiple concatenations
-    printf("\n10. Testing multiple concatenations\n");
-    Text multi = TXT("A");
-    Text add_b = TXT("B");
-    Text add_c = TXT("C");
-    Text add_d = TXT("D");
+    /* Test concat */
+    TextBuffer_concat(working_buf, TXT("Hello"));
+    PRINT_TEXTBUFFER(working_buf, "After concat 'Hello'");
     
-    PRINT_TEXT(multi, "Start");
-    Text_concat(multi, add_b);
-    PRINT_TEXT(multi, "After +B");
-    Text_concat(multi, add_c);
-    PRINT_TEXT(multi, "After +C");
-    Text_concat(multi, add_d);
-    PRINT_TEXT(multi, "Final");
+    TextBuffer_concat(working_buf, TXT(" World"));
+    PRINT_TEXTBUFFER(working_buf, "After concat ' World'");
     
-    // Test 11: Self-operations (edge cases)
-    printf("\n11. Testing edge cases\n");
-    Text self_test = TXT("Self");
-    printf("Self-comparison: %d (should be 0)\n", Text_compare(self_test, self_test));
+    /* Test nConcat */
+    TextBuffer_nConcat(working_buf, TXT("1234567890"), 3);
+    PRINT_TEXTBUFFER(working_buf, "After nConcat '123...' (3 chars)");
     
-    // Test with special characters
-    Text special = TXT("Hello\nWorld\tTest!");
+    /* Test insert */
+    TextBuffer_insert(working_buf, 5, TXT("***"));
+    PRINT_TEXTBUFFER(working_buf, "After insert '***' at position 5");
+    
+    /* Test setChar */
+    TextBuffer_setChar(working_buf, '!', TextBuffer_length(working_buf) - 1);
+    PRINT_TEXTBUFFER(working_buf, "After setChar '!' at last position");
+    
+    /* Test 8: TextBuffer clear and reuse */
+    printf("\n8. Testing TextBuffer clear and reuse\n");
+    PRINT_TEXTBUFFER(working_buf, "Before clear");
+    TextBuffer_clear(working_buf);
+    PRINT_TEXTBUFFER(working_buf, "After clear");
+    
+    TextBuffer_concat(working_buf, TXT("Reused buffer"));
+    PRINT_TEXTBUFFER(working_buf, "After reuse");
+    
+    /* Test 9: Edge cases */
+    printf("\n9. Testing edge cases\n");
+    
+    /* Empty strings */
+    Text empty = TXT("");
+    PRINT_TEXT(empty, "Empty text");
+    printf("Empty text length: %zu\n", Text_length(empty));
+    
+    TextBuffer empty_buf = TextBuffer_fromText(empty);
+    PRINT_TEXTBUFFER(empty_buf, "Buffer from empty text");
+    
+    /* Special characters */
+    Text special = TXT("Tab:\t, Newline:\n, Quote:\"");
     PRINT_TEXT(special, "Text with special chars");
     
-    // Test 12: Mixed operations
-    printf("\n12. Testing mixed operations\n");
-    Text mixed1 = TXT("The quick ");
-    Text mixed2 = TXT("brown fox ");
-    Text mixed3 = TXT("jumps over the lazy dog");
+    /* Test 10: Complex workflow */
+    printf("\n10. Testing complex workflow\n");
+    TextBuffer document = TextBuffer_new(1000);
     
-    txtcat(mixed1, mixed2);
-    txtncat(mixed1, mixed3, 10);  // Only add "jumps over"
-    PRINT_TEXT(mixed1, "Final mixed result");
+    TextBuffer_concat(document, TXT("Title: My Document\n"));
+    TextBuffer_concat(document, TXT("================\n\n"));
+    TextBuffer_concat(document, TXT("Chapter 1: Introduction\n"));
     
-    // Test 13: Performance test (many small operations)
-    printf("\n13. Testing performance with many operations\n");
-    Text perf_test = TXT("");
-    Text digit = TXT("X");
+    Text chapter_text = TXT("This is the introduction to our document. ");
+    TextBuffer_concat(document, chapter_text);
+    
+    TextBuffer_nConcat(document, TXT("We will explore many topics in great detail throughout this work."), 25);
+    
+    PRINT_TEXTBUFFER(document, "Complete document");
+    
+    /* Extract and work with parts */
+    Text doc_as_text = TB2TXT(document);
+    int title_pos = Text_find(doc_as_text, TXT("Title:"));
+    int chapter_pos = Text_find(doc_as_text, TXT("Chapter"));
+    
+    printf("Position of 'Title:': %d\n", title_pos);
+    printf("Position of 'Chapter': %d\n", chapter_pos);
+    
+    /* Test 11: Performance test */
+    printf("\n11. Performance test - building long text\n");
+    TextBuffer perf_buf = TextBuffer_new(10000);
     
     for (int i = 0; i < 100; i++) {
-        Text_concat(perf_test, digit);
+        char temp[20];
+        snprintf(temp, sizeof(temp), "Item%03d ", i);
+        TextBuffer_concat(perf_buf, CSTR2TXT(temp));
     }
-    printf("After 100 concatenations: length = %zu\n", Text_length(perf_test));
     
-    // Cleanup
+    printf("Performance buffer final length: %zu\n", TextBuffer_length(perf_buf));
+    
+    /* Show first and last parts */
+    Text perf_text = TB2TXT(perf_buf);
+    Text first_part = Text_substring(perf_text, 0, 50);
+    size_t len = Text_length(perf_text);
+    Text last_part = Text_substring(perf_text, len > 50 ? len - 50 : 0, 50);
+    
+    PRINT_TEXT(first_part, "Performance buffer start");
+    PRINT_TEXT(last_part, "Performance buffer end");
+    
+    /* Test 12: Text conversion round-trip */
+    printf("\n12. Testing Text ↔ C string conversion\n");
+    char original_cstr[] = "Round trip test!";
+    Text from_cstr = CSTR2TXT(original_cstr);
+    char *back_to_cstr = TXT2STR(from_cstr);
+    
+    printf("Original C string: \"%s\"\n", original_cstr);
+    PRINT_TEXT(from_cstr, "As Text");
+    printf("Back to C string: \"%s\"\n", back_to_cstr);
+    printf("Strings match: %s\n", strcmp(original_cstr, back_to_cstr) == 0 ? "YES" : "NO");
+    
+    free(back_to_cstr);
+    
+    /* Test 13: Boundary testing */
+    printf("\n13. Testing boundary conditions\n");
+    
+    Text boundary_text = TXT("0123456789");
+    printf("Original: ");
+    PRINT_TEXT(boundary_text, "");
+    
+    /* Test charAt at boundaries */
+    printf("charAt(0): '%c'\n", Text_charAt(boundary_text, 0));
+    printf("charAt(9): '%c'\n", Text_charAt(boundary_text, 9));
+    
+    /* Test substring at boundaries */
+    Text sub_start = Text_substring(boundary_text, 0, 1);
+    Text sub_end = Text_substring(boundary_text, 9, 1);
+    Text sub_all = Text_substring(boundary_text, 0, 10);
+    
+    PRINT_TEXT(sub_start, "substring(0,1)");
+    PRINT_TEXT(sub_end, "substring(9,1)");
+    PRINT_TEXT(sub_all, "substring(0,10)");
+    
+    /* Cleanup */
     printf("\n14. Cleanup\n");
-    Text_free(txt1);
-    Text_free(txt2);
-    Text_free(txt3);
-    Text_free(txt4);
-    Text_free(txt5);
-    Text_free(txt6);
-    Text_free(txt7);
-    Text_free(txt8);
-    Text_free(txt9);
-    if (empty1) Text_free(empty1);
-    if (empty2) Text_free(empty2);
-    Text_free(long_txt);
-    Text_free(multi);
-    Text_free(add_b);
-    Text_free(add_c);
-    Text_free(add_d);
-    Text_free(self_test);
-    Text_free(special);
-    Text_free(mixed1);
-    Text_free(mixed2);
-    Text_free(mixed3);
-    Text_free(perf_test);
-    Text_free(digit);
     
-    printf("All text objects freed successfully\n");
+    /* Free TextBuffers */
+    TextBuffer_free(buf1);
+    TextBuffer_free(buf2);
+    TextBuffer_free(buf3);
+    TextBuffer_free(working_buf);
+    TextBuffer_free(empty_buf);
+    TextBuffer_free(document);
+    TextBuffer_free(perf_buf);
+    
+    /* Note: Text objects created with TXT() macro are stack-allocated
+       and don't need explicit freeing. Only dynamically allocated
+       Text objects (like from Text_substring) need to be freed. */
+    if (first_part != NULL) free((void*)first_part);
+    if (last_part  != NULL) free((void*)last_part);
+    if (sub_start  != NULL) free((void*)sub_start);
+    if (sub_end    != NULL) free((void*)sub_end);
+    if (sub_all    != NULL) free((void*)sub_all);
+    
+    printf("Cleanup completed\n");
     
     SEPARATOR();
-    printf("✅ All Text API tests completed!\n");
+    printf("  All Text API tests completed successfully!\n");
+    printf("  Tests covered:\n");
+    printf("   - Text creation and macros\n");
+    printf("   - Character access and length\n");
+    printf("   - Text comparison\n");
+    printf("   - Text searching (find, rfind, findChar)\n");
+    printf("   - Text substring extraction\n");
+    printf("   - TextBuffer creation and manipulation\n");
+    printf("   - TextBuffer insertion and modification\n");
+    printf("   - Edge cases and boundary conditions\n");
+    printf("   - Performance testing\n");
+    printf("   - Memory management\n");
     
-    return 0;
-}

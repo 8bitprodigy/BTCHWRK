@@ -105,7 +105,7 @@ void *
 Sequence_at(Sequence self, size_t index)
 {
 	assert(self);
-	assert(index < self->capacity);
+	assert(index < self->length);
 
 	return INDEX(index);
 }

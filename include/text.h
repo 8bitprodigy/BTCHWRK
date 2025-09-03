@@ -17,17 +17,19 @@
 #define txtcmp( txt1, txt2 ) Text_compare( (txt1), (txt2) )
 
 
-typedef Txt Txt;
-typedef Txt* Text;
-typedef Sequence TextBuffer;
+typedef struct Txt Txt;
+typedef struct Txt* Text;
+typedef struct Sequence TextBuffer;
 
 
-char    Text_charAt(  Text txt,  size_t index);
-int     Text_compare( Text txt1, Text   txt2);
-int     Text_find(    Text txt,  Text   needle);
-int     Text_findChar(Text txt,  char   c);
-size_t  Text_length(  Text txt);
-char   *Text_toCStr(  Text txt);
+char    Text_charAt(   Text txt,  size_t index);
+int     Text_compare(  Text txt1, Text   txt2);
+int     Text_find(     Text txt,  Text   needle);
+int     Text_findChar( Text txt,  char   c);
+size_t  Text_length(   Text txt);
+int     Text_rfind(    Text txt,  Text   needle);
+Text    Text_substring(Text txt,  size_t start, size_t length);
+char   *Text_toCStr(   Text txt);
 
 
 /* Constructor / Destructor */
@@ -36,15 +38,17 @@ TextBuffer TextBuffer_fromText(Text        txt);
 TextBuffer TextBuffer_fromCStr(const char *cstr);
 void       TextBuffer_free(    TextBuffer  buf);
 
+
 /* 
 	TextBuffer Methods 
 */
 /* Access */
 size_t TextBuffer_length(  TextBuffer buf);
 /* Mutators */
-void   TextBuffer_insert(  TextBuffer buf, size_t index, Text   txt);
+void   TextBuffer_clear(   TextBuffer buf);
 void   TextBuffer_concat(  TextBuffer buf, Text   txt);
 void   TextBuffer_nConcat( TextBuffer buf, Text   txt,   size_t length);
+void   TextBuffer_insert(  TextBuffer buf, size_t index, Text   txt);
 void   TextBuffer_setChar( TextBuffer buf, char   c,     size_t index);
 
 

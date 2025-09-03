@@ -1,4 +1,4 @@
-# test_Sequence Example Makefile
+# Sequence Example Makefile
 
 # Program name
 PROGRAM = Sequence
