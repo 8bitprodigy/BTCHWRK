@@ -9,8 +9,8 @@
 #endif
 
 
-typedef struct Seq Seq;       /* Sequence type forward decl */
-typedef struct Seq *Sequence; /* Pointer to the sequence */
+typedef struct Seq  Seq;      /* Sequence type forward decl */
+typedef struct Seq* Sequence; /* Pointer to the sequence */
 
 
 /* Constructor / Destructor */
@@ -23,13 +23,13 @@ void   Sequence_shrink(   Sequence   seq);
 
 void    Sequence_add(     Sequence   seq,  void     *datum);
 void   *Sequence_at(      Sequence   seq,  size_t    index);
-void    Sequence_append(  Sequence   seq,  void     *data,  size_t  size);
+void    Sequence_append(  Sequence   seq,  void     *data,  size_t  length);
 size_t  Sequence_capacity(Sequence   seq);
 void    Sequence_concat(  Sequence   seq1, Sequence  seq2);
-void    Sequence_delete(  Sequence   seq,  size_t    index, size_t size);
-void    Sequence_insert(  Sequence   seq,  size_t    index, void   *data,   size_t size);
+void    Sequence_delete(  Sequence   seq,  size_t    index, size_t length);
+void    Sequence_insert(  Sequence   seq,  size_t    index, void   *data,   size_t length);
 size_t  Sequence_length(  Sequence   seq);
-void    Sequence_replace( Sequence   seq,  size_t    index, void   *data,   size_t size);
+void    Sequence_replace( Sequence   seq,  size_t    index, void   *data,   size_t length);
 
 
 #endif /* BTCHWRK_SEQUENCE_H */
