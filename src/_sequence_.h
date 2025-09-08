@@ -11,7 +11,8 @@ Seq
 	size_t  length;     /* ALWAYS second */
 	size_t  capacity;
 	size_t  datum_size;
-};
+}
+Seq;
 
 
 #endif /* BTCHWRK_SEQUENCE_PRVT_H */
