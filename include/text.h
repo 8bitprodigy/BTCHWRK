@@ -42,6 +42,7 @@ char   *Text_toCStr(   Text txt);
 TextBuffer TextBuffer_new(     size_t      capacity);
 TextBuffer TextBuffer_fromText(Text        txt);
 TextBuffer TextBuffer_fromCStr(const char *cstr);
+TextBuffer TextBuffer_substring(TextBuffer buf, size_t start, size_t length);
 void       TextBuffer_free(    TextBuffer  buf);
 
 
@@ -56,7 +57,6 @@ void       TextBuffer_concat(   TextBuffer buf, Text   txt);
 void       TextBuffer_nConcat(  TextBuffer buf, Text   txt,   size_t length);
 void       TextBuffer_insert(   TextBuffer buf, size_t index, Text   txt);
 void       TextBuffer_setChar(  TextBuffer buf, char   c,     size_t index);
-TextBuffer TextBuffer_substring(TextBuffer buf, size_t start, size_t length);
 
 
 #endif /* BTCHWRK_TEXT_H */
