@@ -31,7 +31,7 @@ Sequence_new( size_t datum_size, size_t capacity )
 	seq->capacity   = capacity;
 
 	return seq;
-}
+} /* Sequence_new */
 
 
 void 
@@ -39,7 +39,7 @@ Sequence_free(Sequence self)
 {
 	free(self->data);
 	free(self);
-}
+} /* Sequence_free */
 
 
 void
@@ -57,7 +57,7 @@ Sequence_grow(Sequence self)
 
 	self->data     = new_arr;
 	self->capacity = new_len;
-}
+} /* Sequence_grow */
 
 
 void
@@ -77,14 +77,14 @@ Sequence_shrink(Sequence self)
 
 	self->data     = new_arr;
 	self->capacity = self->length;
-}
+} /* Sequence_shrink */
 
 
 void
 Sequence_add(Sequence self, void *datum)
 {
 	Sequence_append(self, datum, 1);
-}
+} /* Sequence_add */
 
 
 void
@@ -98,7 +98,7 @@ Sequence_append(Sequence self, void *data, size_t size)
 
 	memcpy(INDEX(self->length), data, size * self->datum_size);
 	self->length += size;
-}
+} /* Sequence_append */
 
 
 void *
@@ -109,7 +109,7 @@ Sequence_at(Sequence self, size_t index)
 	assert(index <= self->length);
 
 	return INDEX(index);
-}
+} /* Sequence_at */
 
 
 size_t
@@ -118,14 +118,14 @@ Sequence_capacity(Sequence self)
 	assert(self);
 
 	return self->capacity;
-}
+} /* Sequence_capacity */
 
 
 void
 Sequence_concat(Sequence self, Sequence seq)
 {
 	Sequence_append(self, seq->data, seq->length);
-}
+} /* Sequence_concat */
 
 
 void
@@ -139,7 +139,7 @@ Sequence_delete(Sequence self, size_t index, size_t size)
 	int rest = self->length - index;
 	memcpy(INDEX(index), INDEX(index + size), rest * self->datum_size);
 	self->length -= size;
-}
+} /* Sequence_delete */
 
 
 void
@@ -158,7 +158,7 @@ Sequence_insert(Sequence self, size_t index, void *data, size_t size)
 	memcpy(INDEX(index+size), INDEX(index), rest * self->datum_size);
 	memcpy(INDEX(index), data, size * self->datum_size);
 	self->length += size;
-}
+} /* Sequence_insert */
 
 
 size_t
@@ -167,7 +167,7 @@ Sequence_length(Sequence self)
 	assert(self);
 	
 	return self->length;
-}
+} /* Sequence_length */
 
 
 void
@@ -185,4 +185,4 @@ Sequence_replace(Sequence self, size_t index, void *data, size_t size)
 
 	memcpy(INDEX(index), data, size);
 	self->length = (self->length < amount) ? amount : self->length;
-}
+} /* Sequence_replace */

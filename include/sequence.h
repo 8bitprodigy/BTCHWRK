@@ -1,6 +1,7 @@
 #ifndef BTCHWRK_SEQUENCE_H
 #define BTCHWRK_SEQUENCE_H
 
+
 #include "common.h"
 
 

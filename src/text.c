@@ -22,7 +22,7 @@ char
 Text_charAt(Text txt, size_t index)
 {
 	txt.data[index];
-}
+} /* Text_charAt */
 
 
 int
@@ -33,7 +33,7 @@ Text_compare(Text self, Text other)
 	}
 
 	return memcmp(self.data, other.data, self.length);
-}
+} /* Text_compare */
 
 
 int
@@ -54,7 +54,7 @@ Text_find(Text self, Text needle)
 	}
 
 	return -1;
-}
+} /* Text_find */
 
 
 int
@@ -65,14 +65,14 @@ Text_findChar(Text self, char c)
 	}
 
 	return -1;
-}
+} /* Text_findChar */
 
 
 size_t
 Text_length(Text self)
 {
 	return self.length;
-}
+} /* Text_length */
 
 
 int
@@ -92,13 +92,13 @@ Text_rfind(Text self, Text needle)
 	}
 
 	return -1;
-}
+} /* Text_rfind */
 
 char *
 Text_toCStr(Text self)
 {
 	return self.data;
-}
+} /* Text_toCStr */
 
 
 /*****************
@@ -113,7 +113,7 @@ TextBuffer_new(size_t capacity)
 	TextBuffer buf = (TextBuffer)Sequence_new(sizeof(char), capacity);
 
 	return buf;
-}
+} /* TextBuffer_new */
 
 
 TextBuffer
@@ -123,7 +123,7 @@ TextBuffer_fromText(Text txt)
 	Sequence_append((Sequence)buf, (void*)txt.data, txt.length);
 	
 	return buf;
-}
+} /* TextBuffer_fromText */
 
 
 TextBuffer
@@ -133,14 +133,14 @@ TextBuffer_fromCStr(const char *cstr)
 	Sequence_append((Sequence)buf, cstr, sizeof(cstr));
 
 	return buf;
-}
+} /* TextBuffer_fromCStr */
 
 
 void
 TextBuffer_free(TextBuffer self)
 {
 	Sequence_free((Sequence)self);
-}
+} /* TextBuffer_free */
 
 
 /*
@@ -151,7 +151,7 @@ size_t
 TextBuffer_length(TextBuffer self)
 {
 	return self ? self->length : 0;
-}
+} /* TextBuffer_length */
 
 /* Mutators */
 void
@@ -159,14 +159,14 @@ TextBuffer_clear(TextBuffer buf)
 {
 	buf->data = '\0';
 	buf->length = 0;
-}
+} /* TextBuffer_clear */
 
 
 void
 TextBuffer_concat(TextBuffer self, Text other)
 {
 	TextBuffer_nConcat(self, other, other.length);
-}
+} /* TextBuffer_concat */
 
 
 void
@@ -174,7 +174,7 @@ TextBuffer_nConcat(TextBuffer self, Text other, size_t length)
 {
 	Sequence_append((Sequence)self, other.data, (length <= other.length) ? length : other.length);
 	NULL_TERMINATE(self);
-}
+} /* TextBuffer_nConcat */
 
 
 void
@@ -182,7 +182,7 @@ TextBuffer_insert(TextBuffer self, size_t index, Text txt)
 {
 	Sequence_insert((Sequence)self, index, txt.data, txt.length);
 	NULL_TERMINATE(self);
-}
+} /* TextBuffer_insert */
 
 
 void
@@ -191,7 +191,7 @@ TextBuffer_setChar(TextBuffer self, char c, size_t index)
 	if (!self) return;
 	char *entry = Sequence_at(self, index);
 	if (entry) *entry = c;
-}
+} /* TextBuffer_setChar */
 
 
 TextBuffer
@@ -209,4 +209,4 @@ TextBuffer_substring(TextBuffer self, size_t start, size_t length)
 	TextBuffer_insert(buf, 0, (Text){self->data+start, length}); 
 	
 	return buf;
-}
+} /* TextBuffer_substring */

@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "sequence.h"
+#include "text.h"
 
 
 #endif /* BTCHWRK_H */
