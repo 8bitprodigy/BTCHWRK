@@ -65,18 +65,14 @@ Sequence_shrink(Sequence self)
 {
 	assert(self);
 	
-	void *new_arr = malloc((self->length + 1) * self->datum_size);
+	void *new_arr = realloc(self->data, (self->length + 1) * self->datum_size);
 	if (!new_arr) {
 		DBG_OUT("Failed to allocate new shrunk array.");
 		return;
 	}
 
-	memcpy(new_arr, self->data, self->length * self->datum_size);
-
-	free(self->data);
-
 	self->data     = new_arr;
-	self->capacity = self->length;
+	self->capacity = self->length+1;
 } /* Sequence_shrink */
 
 

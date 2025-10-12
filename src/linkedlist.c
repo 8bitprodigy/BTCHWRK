@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <string.h>
 
 #include "_linkedlist_.h"
@@ -53,7 +54,7 @@ LinkedList_free(void *data)
 void *
 LinkedList_add(void *self, void *data, size_t size)
 {
-	LinkedList_insert(self, LinkedList_new(data, size); 
+	LinkedList_insert(self, LinkedList_new(data, size)); 
 }
 
 
@@ -109,7 +110,7 @@ LinkedList_getNth(void *self, long long position)
 
 
 void *
-LinkedList_getPrev(noid *self)
+LinkedList_getPrev(void *self)
 {
 	return &GET_NODE(self)->prev->payload;
 }

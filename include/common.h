@@ -38,7 +38,8 @@ typedef enum
 }
 VariantTag;
 
-typedef union Any
+typedef union 
+Any
 {
 	char                c;
 	unsigned char       uc;
@@ -53,42 +54,16 @@ typedef union Any
 	float               f;
 	double              d;
 	void               *v;
-
-	char                ca[sizeof(Any) / sizeof(char)];
-    unsigned char       uca[sizeof(Any) / sizeof(unsigned char)];
     
-    /* These will have arrays if they're smaller than the largest type */
-    #if (sizeof(Any) / sizeof(short)) > 1
-    short               sa[sizeof(Any) / sizeof(short)];
-    unsigned short      usa[sizeof(Any) / sizeof(unsigned short)];
-    #endif
-    
-    #if (sizeof(Any) / sizeof(int)) > 1
-    int                 ia[sizeof(Any) / sizeof(int)];
-    unsigned            ua[sizeof(Any) / sizeof(unsigned)];
-    #endif
-    
-    #if (sizeof(Any) / sizeof(long)) > 1
-    long                la[sizeof(Any) / sizeof(long)];
-    unsigned long       ula[sizeof(Any) / sizeof(unsigned long)];
-    #endif
-    
-    #if (sizeof(Any) / sizeof(long long)) > 1
-    long long           lla[sizeof(Any) / sizeof(long long)];
-    unsigned long long  ulla[sizeof(Any) / sizeof(unsigned long long)];
-    #endif
-    
-    #if (sizeof(Any) / sizeof(float)) > 1
-    float               fa[sizeof(Any) / sizeof(float)];
-    #endif
-    
-    #if (sizeof(Any) / sizeof(double)) > 1
-    double              da[sizeof(Any) / sizeof(double)];
-    #endif
-    
-    #if (sizeof(Any) / sizeof(void*)) > 1
-    void               *va[sizeof(Any) / sizeof(void*)];
-    #endif
+    char                ca[8];
+    unsigned char       uca[8];
+    short               sa[4];
+    unsigned short      usa[4];
+    int                 ia[2];
+    unsigned            ua[2];
+    long                la[2];
+    unsigned long       ula[2];
+    float               fa[2];
 }
 Any;
 
