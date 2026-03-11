@@ -3,11 +3,6 @@
 #include "_sequence_.h"
 #include "text.h"
 
-// Right after your includes in text.c:
-static Sequence test_var;     // This works
-static Sequence* test_var3;   // Does this work?
-typedef Sequence TextBuffer_test;
-static TextBuffer_test test_var4;  // Does this work?
 
 #define NULL_TERMINATE( txt ) do{ \
     Sequence_add( (txt), &(char){'\0'}); \

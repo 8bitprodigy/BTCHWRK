@@ -14,6 +14,13 @@ pick.
 
 - `Any` - `<btchwrk/common.h>`: A typedef'd union that can hold any basic C type.
 
+- `DynamicArray` - `<btchwrk/dynamicarray.h>`: A dynamic array container type
+	which allows you to use the array accessor. Stores data about the dynamic
+	array in a hidden opaque header.
+	
+- `LinkedList` - `<btchwrk/linkedlist.h>`: An intrusively linked list container
+	type. There is no type safety.
+	
 - `Sequence` - `<btchwrk/sequence.h>`: A dynamic array container type.
 	- **Methods:**
 		- `Sequence Sequence_new( size_t datum_size, size_t capacity)`: Creates 

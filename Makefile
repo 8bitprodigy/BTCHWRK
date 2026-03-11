@@ -2,8 +2,8 @@
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -O2 -fPIC
-DEBUG_CFLAGS = -Wall -Wextra -std=c99 -g -DDEBUG -fPIC
+CFLAGS = -Wall -Wextra -std=c99 -O0 -fPIC -g3
+DEBUG_CFLAGS = -Wall -Wextra -std=c99 -g3 -DDEBUG -fPIC
 AR = ar
 ARFLAGS = rcs
 

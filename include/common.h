@@ -54,6 +54,7 @@ Any
 	float               f;
 	double              d;
 	void               *v;
+	char               *str;
     
     char                ca[8];
     unsigned char       uca[8];
